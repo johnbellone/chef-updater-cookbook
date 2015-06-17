@@ -27,7 +27,7 @@ class Chef::Resource::ChefUpdater < Chef::Resource
       end
 
       package new_resource.package_name do
-        version new_resource.version unless new_resource.version.nil?
+        version new_resource.package_version unless new_resource.package_version.nil?
         source location unless location.nil?
         action :upgrade
         notifies :run, 'ruby_block[Abort Chef Client]', :immediately
