@@ -18,7 +18,7 @@ class Chef::Resource::ChefUpdater < Chef::Resource
   action(:upgrade) do
     notifying_block do
       location = new_resource.package_source
-      if location =~ URI::regexp
+      if location =~ /\A#{URI::regexp}\z/
         location = remote_file ::File.join(Chef::Config[:file_cache_path], ::File.basename(location)) do
           source location
           checksum new_resource.package_checksum unless new_resource.package_checksum.nil?
@@ -27,6 +27,7 @@ class Chef::Resource::ChefUpdater < Chef::Resource
       end
 
       package new_resource.package_name do
+        provider Chef::Provider::Package::Dpkg if node['platform'] == 'ubuntu'
         version new_resource.package_version unless new_resource.package_version.nil?
         source location unless location.nil?
         action :upgrade

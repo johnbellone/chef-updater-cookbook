@@ -4,16 +4,20 @@ driver:
 
 provisioner:
   name: chef_zero
+  require_chef_omnibus: "12.2.1"
 
 platforms:
   - name: ubuntu-14.04
   - name: ubuntu-12.04
   - name: centos-7.1
-  - name: centos-6.4
-  - name: centos-5.8
+  - name: centos-6.6
+  - name: centos-5.11
 
 suites:
   - name: default
     run_list:
       - recipe[chef-updater::default]
     attributes:
+      chef-updater:
+        package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/10.04/x86_64/chef_12.3.0-1_amd64.deb"
+        package_version: "12.3.0"
