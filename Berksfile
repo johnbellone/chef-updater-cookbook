@@ -1,3 +1,6 @@
 source 'https://supermarket.chef.io'
-extension 'halite'
 metadata
+
+group :test, :development do
+  cookbook 'git'
+end

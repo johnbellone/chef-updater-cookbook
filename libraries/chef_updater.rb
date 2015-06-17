@@ -31,15 +31,15 @@ class Chef::Resource::ChefUpdater < Chef::Resource
         version new_resource.package_version unless new_resource.package_version.nil?
         source location unless location.nil?
         action :upgrade
-        notifies :run, 'ruby_block[Abort Chef Client]', :immediately
+        notifies :run, 'ruby_block[Abort Chef Client Early]', :immediately
       end
 
       # TODO: (jbellone) Use a Chef handler here to report which
       # clients upgraded.  We are going to want to know this
       # information.
 
-      ruby_block 'Abort Chef Client' do
-        block { Chef::Application.fatal!('Chef client has been upgraded; aborting the run!') }
+      ruby_block 'Abort Chef Client Early' do
+        block { throw :end_client_run_early }
         action :nothing
       end
     end

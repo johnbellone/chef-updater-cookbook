@@ -1,0 +1,23 @@
+DEPENDENCIES
+  chef-updater
+    path: .
+    metadata: true
+  git
+
+GRAPH
+  build-essential (2.2.3)
+  chef-updater (1.0.0)
+    poise (>= 0.0.0)
+  chef_handler (1.1.9)
+  dmg (2.2.2)
+  git (4.2.2)
+    build-essential (>= 0.0.0)
+    dmg (>= 0.0.0)
+    windows (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+  poise (2.0.1)
+  windows (1.37.0)
+    chef_handler (>= 0.0.0)
+  yum (3.6.1)
+  yum-epel (0.6.0)
+    yum (~> 3.0)
