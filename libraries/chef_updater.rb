@@ -28,7 +28,6 @@ class Chef::Resource::ChefUpdater < Chef::Resource
                  end
 
       package new_resource.package_name do
-        allow_downgrade true
         provider Chef::Provider::Package::Dpkg if node['platform'] == 'ubuntu'
         version new_resource.package_version unless new_resource.package_version.nil?
         source location unless location.nil?
