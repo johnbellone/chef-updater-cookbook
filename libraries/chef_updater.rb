@@ -17,16 +17,18 @@ class Chef::Resource::ChefUpdater < Chef::Resource
 
   action(:upgrade) do
     notifying_block do
-      location = new_resource.package_source
-      if location =~ /\A#{URI::regexp}\z/
-        location = remote_file ::File.join(Chef::Config[:file_cache_path], ::File.basename(location)) do
-          source location
-          checksum new_resource.package_checksum unless new_resource.package_checksum.nil?
-          action :create_if_missing
-        end.path
-      end
+      location = if location =~ /\A#{URI::regexp}\z/
+                   remote_file ::File.join(Chef::Config[:file_cache_path], ::File.basename(location)) do
+                     source location
+                     checksum new_resource.package_checksum unless new_resource.package_checksum.nil?
+                     action :create_if_missing
+                   end.path
+                 else
+                   new_resource.package_source
+                 end
 
       package new_resource.package_name do
+        allow_downgrade true
         provider Chef::Provider::Package::Dpkg if node['platform'] == 'ubuntu'
         version new_resource.package_version unless new_resource.package_version.nil?
         source location unless location.nil?
