@@ -32,7 +32,6 @@ class Chef::Resource::ChefUpdater < Chef::Resource
         provider Chef::Provider::Package::Dpkg if node['platform'] == 'ubuntu'
         version new_resource.package_version unless new_resource.package_version.nil?
         source location unless location.nil?
-        action :upgrade
         notifies :run, 'ruby_block[Abort Chef Client Early]', :immediately
       end
 
