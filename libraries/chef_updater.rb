@@ -9,6 +9,7 @@ require 'uri'
 class Chef::Resource::ChefUpdater < Chef::Resource
   include Poise(fused: true)
   provides(:chef_updater)
+  default_action(:upgrade)
 
   attribute(:package_name, kind_of: String, name_attribute: true)
   attribute(:package_source, kind_of: [NilClass, String, Array], default: nil)

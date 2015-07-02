@@ -5,4 +5,4 @@
 #
 default['chef-updater']['install_method'] = 'package'
 default['chef-updater']['package_name'] = 'chef'
-default['chef-updater']['package_version'] = '12.3.0-1'
+default['chef-updater']['package_version'] = '12.4.0-1'
