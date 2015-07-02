@@ -9,12 +9,20 @@ require 'uri'
 class Chef::Resource::ChefUpdater < Chef::Resource
   include Poise(fused: true)
   provides(:chef_updater)
-  default_action(:upgrade)
+  default_action(:nothing)
 
   attribute(:package_name, kind_of: String, name_attribute: true)
   attribute(:package_source, kind_of: [NilClass, String, Array], default: nil)
   attribute(:package_checksum, kind_of: [NilClass, String], default:nil)
   attribute(:package_version, kind_of: [NilClass, String], default: nil)
+
+  def friendly_version
+    if node['platform'] == 'redhat'
+      [package_version, "el#{node['platform_version'].to_i}"].join('.')
+    else
+      package_version
+    end
+  end
 
   action(:upgrade) do
     notifying_block do
@@ -30,7 +38,7 @@ class Chef::Resource::ChefUpdater < Chef::Resource
 
       package new_resource.package_name do
         provider Chef::Provider::Package::Dpkg if node['platform'] == 'ubuntu'
-        version new_resource.package_version unless new_resource.package_version.nil?
+        version new_resource.friendly_version unless new_resource.package_version.nil?
         source location unless location.nil?
         notifies :run, 'ruby_block[Abort Chef Client Early]', :immediately
       end

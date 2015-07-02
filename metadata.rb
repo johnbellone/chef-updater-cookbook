@@ -4,7 +4,7 @@ maintainer_email 'jbellone@bloomberg.net'
 license 'Apache 2.0'
 description ''
 long_description ''
-version '1.0.0'
+version '1.1.0'
 
 supports 'aix'
 supports 'solaris2'
