@@ -11,5 +11,6 @@ supports 'solaris2'
 supports 'centos', '>= 5.8'
 supports 'redhat', '>= 5.8'
 supports 'ubuntu', '>= 12.04'
+supports 'fedora'
 
 depends 'poise'

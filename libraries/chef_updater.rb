@@ -19,8 +19,11 @@ class Chef::Resource::ChefUpdater < Chef::Resource
   # Determines the correct version string for platform families.
   # @return [String]
   def friendly_version
-    if node['platform'] == 'redhat'
+    case node['platform']
+    when 'redhat', 'centos'
       [package_version, "el#{node['platform_version'].to_i}"].join('.')
+    when 'fedora'
+      [package_version, "fc#{node['platform_version'].to_i}"].join('.')
     else
       package_version
     end
