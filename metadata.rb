@@ -4,11 +4,12 @@ maintainer_email 'jbellone@bloomberg.net'
 license 'Apache 2.0'
 description ''
 long_description ''
-version '1.1.0'
+version '1.2.0'
 
 supports 'aix'
 supports 'solaris2'
 supports 'centos', '>= 5.8'
 supports 'redhat', '>= 5.8'
+supports 'ubuntu', '>= 12.04'
 
 depends 'poise'
