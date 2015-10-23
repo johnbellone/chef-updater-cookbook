@@ -10,7 +10,7 @@ the enterprise likely already have our own mechanisms for distributing
 packages, and most of the time they integrate very well with the
 operating system's package manager.
 
-## Usage
+## Basic Usage
 Because of how this cookbook short-circuits the Chef convergence it
 cannot be run at the compile phase of the run. It should be included
 as early as possible in a node's expanded run-list in order to stop a

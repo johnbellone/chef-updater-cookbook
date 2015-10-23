@@ -4,7 +4,7 @@ maintainer_email 'jbellone@bloomberg.net'
 license 'Apache 2.0'
 description 'Application cookbook which provides recipe for updating Chef Client.'
 long_description 'Application cookbook which provides recipe for updating Chef Client.'
-version '1.2.0'
+version '1.2.1'
 
 supports 'aix'
 supports 'solaris2'
