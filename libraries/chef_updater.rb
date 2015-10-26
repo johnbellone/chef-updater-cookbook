@@ -9,6 +9,9 @@ require 'uri'
 
 module ChefUpdaterCookbook
   module Resource
+    # A custom resource for upgrading the Chef Client.
+    # @todo Build a custom resource for managing Omnibus packages.
+    # @since 1.0.0
     class ChefUpdater < Chef::Resource
       include Poise(fused: true)
       provides(:chef_updater)
@@ -17,37 +20,43 @@ module ChefUpdaterCookbook
       attribute(:package_checksum, kind_of: String)
       attribute(:package_source, kind_of: String)
       attribute(:package_version, kind_of: String)
+      attribute(:base_url, kind_of: String)
 
-      def friendly_version
-        return nil unless package_version
-        case node['platform']
-        when 'redhat', 'centos'
-          [package_version, "el#{node['platform_version'].to_i}"].join('.')
-        when 'fedora'
-          [package_version, "fc#{node['platform_version'].to_i}"].join('.')
+      def remote_source
+        return package_source if package_source
+        ::URI.join(base_url, fancy_basename).to_s
+      end
+
+      def fancy_basename
+        delimiter = platform_family?('debian') ? '_' : '.'
+        [package_name, fancy_version, node['arch']].flatten.compact.join(delimiter)
+      end
+
+      def fancy_version
+        return package_version unless platform_family?('rhel')
+        if platform?('fedora')
+          [package_version, "fc#{node['platform_version'].to_i}"]
         else
-          package_version
+          [package_version, "el#{node['platform_version'].to_i}"]
         end
       end
 
-      action(:upgrade) do
+      action(:run) do
         notifying_block do
-          location = if new_resource.package_source =~ /\A#{URI::regexp}\z/
-                       basename = ::File.basename(new_resource.package_source)
-                       remote_file ::File.join(Chef::Config[:file_cache_path], basename) do
-                         source new_resource.package_source
-                         checksum new_resource.package_checksum unless new_resource.package_checksum.nil?
-                         action :create_if_missing
-                       end.path
-                     else
-                       new_resource.package_source
-                     end
+          # HACK: AIX package provider does not support installing from remote.
+          location = remote_file new_resource.fancy_basename do
+            path ::File.join(Chef::Config[:file_cache_path], new_resource.fancy_basename)
+            source new_resource.remote_source
+            checksum new_resource.package_checksum if new_resource.package_checksum
+          end
 
           package new_resource.package_name do
-            version new_resource.friendly_version
+            source location.path
+            version new_resource.fancy_version
             provider Chef::Provider::Package::Dpkg if platform?('ubuntu')
             if platform?('solaris2')
               provider Chef::Provider::Package::Solaris
+              # TODO: https://github.com/chef/chef/pull/4101
               action :install
             else
               action :upgrade

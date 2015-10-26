@@ -55,3 +55,4 @@ Berksfile.lock
 coverage/
 Policyfile.lock.json
 nodes/
+Berksfile.lock

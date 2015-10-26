@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 gem 'poise'
+gem 'poise-boiler'
 
 group :lint do
   gem 'foodcritic'
@@ -28,9 +29,6 @@ group :integration do
 end
 
 group :development do
-  gem 'guard-kitchen'
-  gem 'guard-rspec'
-  gem 'guard-rubocop'
   gem 'rake'
 end
 

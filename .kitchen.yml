@@ -21,8 +21,8 @@ suites:
       - recipe[git::default]
     attributes:
       chef-updater:
-        package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/el/5/x86_64/chef-12.4.1-1.el5.x86_64.rpm"
-        package_version: "12.4.1-1"
+        package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/el/5/x86_64/chef-12.5.1-1.el5.x86_64.rpm"
+        package_version: "12.5.1-1"
     includes:
       - centos-5.11
   - name: el6
@@ -31,8 +31,8 @@ suites:
       - recipe[git::default]
     attributes:
       chef-updater:
-        package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-12.4.1-1.el6.x86_64.rpm"
-        package_version: "12.4.1-1"
+        package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-12.5.1-1.el6.x86_64.rpm"
+        package_version: "12.5.1-1"
     includes:
       - centos-6.6
       - centos-6.4
@@ -42,8 +42,8 @@ suites:
       - recipe[git::default]
     attributes:
       chef-updater:
-        package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/el/7/x86_64/chef-12.4.1-1.el7.x86_64.rpm"
-        package_version: "12.4.1-1"
+        package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/el/7/x86_64/chef-12.5.1-1.el7.x86_64.rpm"
+        package_version: "12.5.1-1"
     includes:
       - centos.7.1
   - name: ubuntu
@@ -52,8 +52,8 @@ suites:
       - recipe[git::default]
     attributes:
       chef-updater:
-        package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/10.04/x86_64/chef_12.4.1-1_amd64.deb"
-        package_version: "12.4.1-1"
+        package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/10.04/x86_64/chef_12.5.1-1_amd64.deb"
+        package_version: "12.5.1-1"
     includes:
       - ubuntu-12.04
       - ubuntu-14.04
