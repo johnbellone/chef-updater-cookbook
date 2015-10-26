@@ -9,4 +9,4 @@ chef_updater node['chef-updater']['package_name'] do
   package_version node['chef-updater']['package_version']
   package_checksum node['chef-updater']['package_checksum']
   package_source node['chef-updater']['package_source']
-end.run_action(:upgrade)
+end.run_action(:run)
