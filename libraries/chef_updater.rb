@@ -21,6 +21,8 @@ module ChefUpdaterCookbook
       attribute(:package_source, kind_of: String)
       attribute(:package_version, kind_of: String)
       attribute(:base_url, kind_of: String)
+      attribute(:timeout, kind_of: [String,Integer], default: 900)
+      attribute(:package_options, kind_of: String)
 
       def remote_source
         return package_source if package_source
@@ -29,15 +31,28 @@ module ChefUpdaterCookbook
 
       def fancy_basename
         delimiter = platform_family?('debian') ? '_' : '.'
-        [package_name, fancy_version, node['arch']].flatten.compact.join(delimiter)
+        [fancy_package_name,fancy_extension].join(delimiter)
       end
 
-      def fancy_version
-        return package_version unless platform_family?('rhel')
-        if platform?('fedora')
-          [package_version, "fc#{node['platform_version'].to_i}"]
+      def fancy_package_name
+        delimiter = platform_family?('debian') ? '_' : '-'
+        [package_name,package_version].join(delimiter)
+      end
+
+      def fancy_extension
+        arch = node['kernel']['machine']
+        if platform_family?('rhel')
+          identifier = "el#{node['platform_version'].to_i}"
+          "#{identifier}.#{arch}.rpm"
+        elsif platform_family?('debian')
+          arch = 'amd64' if arch == 'x86_64'
+          "#{arch}.deb"
+        elsif platform_family?('solaris2')
+          "sparc#{node['platform_version']}.solaris"
+        elsif platform_family?('aix')
+          "#{arch}.bff"
         else
-          [package_version, "el#{node['platform_version'].to_i}"]
+          nil
         end
       end
 
@@ -52,7 +67,7 @@ module ChefUpdaterCookbook
 
           package new_resource.package_name do
             source location.path
-            version new_resource.fancy_version
+            version new_resource.package_version
             provider Chef::Provider::Package::Dpkg if platform?('ubuntu')
             if platform?('solaris2')
               provider Chef::Provider::Package::Solaris
@@ -61,6 +76,8 @@ module ChefUpdaterCookbook
             else
               action :upgrade
             end
+            timeout new_resource.timeout
+            options new_resource.package_options if new_resource.package_options
             notifies :run, 'ruby_block[Abort Chef Convergence]', :immediately
           end
 
