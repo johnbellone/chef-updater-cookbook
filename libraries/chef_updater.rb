@@ -21,7 +21,7 @@ module ChefUpdaterCookbook
       attribute(:package_source, kind_of: String)
       attribute(:package_version, kind_of: String)
       attribute(:base_url, kind_of: String)
-      attribute(:timeout, kind_of: [String,Integer], default: 900)
+      attribute(:timeout, kind_of: [String, Integer], default: 900)
       attribute(:package_options, kind_of: String)
 
       def remote_source
@@ -31,12 +31,12 @@ module ChefUpdaterCookbook
 
       def fancy_basename
         delimiter = platform_family?('debian') ? '_' : '.'
-        [fancy_package_name,fancy_extension].join(delimiter)
+        [fancy_package_name, fancy_extension].join(delimiter)
       end
 
       def fancy_package_name
         delimiter = platform_family?('debian') ? '_' : '-'
-        [package_name,package_version].join(delimiter)
+        [package_name, package_version].join(delimiter)
       end
 
       def fancy_extension
@@ -51,8 +51,6 @@ module ChefUpdaterCookbook
           "sparc#{node['platform_version']}.solaris"
         elsif platform_family?('aix')
           "#{arch}.bff"
-        else
-          nil
         end
       end
 
