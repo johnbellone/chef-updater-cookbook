@@ -55,7 +55,7 @@ module ChefUpdaterCookbook
       end
 
       action(:run) do
-        return if new_resource.package_version.split('-') == Chef::VERSION
+        return if new_resource.package_version.split('-').first == Chef::VERSION
 
         notifying_block do
           # HACK: AIX package provider does not support installing from remote.
