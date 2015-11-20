@@ -55,6 +55,8 @@ module ChefUpdaterCookbook
       end
 
       action(:run) do
+        return if new_resource.package_version.split('-') == Chef::VERSION
+
         notifying_block do
           # HACK: AIX package provider does not support installing from remote.
           location = remote_file new_resource.fancy_basename do
