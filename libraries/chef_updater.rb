@@ -6,6 +6,7 @@
 #
 require 'poise'
 require 'uri'
+require 'chef/mixin/shell_out'
 
 module ChefUpdaterCookbook
   module Resource
@@ -54,6 +55,10 @@ module ChefUpdaterCookbook
         end
       end
 
+      def current_version
+        shell_out("chef-client -version |awk '{print $2}'")
+      end
+
       action(:run) do
         notifying_block do
           # HACK: AIX package provider does not support installing from remote.
@@ -63,6 +68,7 @@ module ChefUpdaterCookbook
             checksum new_resource.package_checksum if new_resource.package_checksum
           end
 
+        unless Array(current_version).include?(new_resource.package_version)
           package new_resource.package_name do
             source location.path
             version new_resource.package_version
@@ -78,6 +84,7 @@ module ChefUpdaterCookbook
             options new_resource.package_options if new_resource.package_options
             notifies :run, 'ruby_block[Abort Chef Convergence]', :immediately
           end
+        end
 
           ruby_block 'Abort Chef Convergence' do
             block { throw :end_client_run_early }
