@@ -16,3 +16,4 @@ supports 'ubuntu', '>= 12.04'
 supports 'fedora'
 
 depends 'poise', '~> 2.0'
+depends 'chef-sugar', '~> 3.3'

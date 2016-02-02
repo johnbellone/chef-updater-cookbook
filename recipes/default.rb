@@ -4,6 +4,8 @@
 #
 # Copyright 2015, Bloomberg Finance L.P.
 #
+include_recipe 'chef-sugar::default'
+
 chef_updater node['chef-updater']['package_name'] do
   base_url node['chef-updater']['base_url']
   package_version node['chef-updater']['package_version']

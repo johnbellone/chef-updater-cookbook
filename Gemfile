@@ -22,6 +22,7 @@ end
 group :unit do
   gem 'berkshelf'
   gem 'chefspec'
+  gem 'chef-sugar'
 end
 
 group :integration do
