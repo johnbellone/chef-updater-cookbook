@@ -18,7 +18,6 @@ suites:
   - name: el5
     run_list:
       - recipe[chef-updater::default]
-      - recipe[git::default]
     attributes:
       chef-updater:
         package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/el/5/x86_64/chef-12.5.1-1.el5.x86_64.rpm"
@@ -28,7 +27,6 @@ suites:
   - name: el6
     run_list:
       - recipe[chef-updater::default]
-      - recipe[git::default]
     attributes:
       chef-updater:
         package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-12.5.1-1.el6.x86_64.rpm"
@@ -39,17 +37,15 @@ suites:
   - name: el7
     run_list:
       - recipe[chef-updater::default]
-      - recipe[git::default]
     attributes:
       chef-updater:
         package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/el/7/x86_64/chef-12.5.1-1.el7.x86_64.rpm"
         package_version: "12.5.1-1"
     includes:
-      - centos.7.1
+      - centos-7.1
   - name: ubuntu
     run_list:
       - recipe[chef-updater::default]
-      - recipe[git::default]
     attributes:
       chef-updater:
         package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/10.04/x86_64/chef_12.5.1-1_amd64.deb"

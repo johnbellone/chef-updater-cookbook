@@ -55,10 +55,10 @@ module ChefUpdaterCookbook
       end
 
       action(:run) do
-        return if new_resource.package_version.split('-').first == Chef::VERSION
+        requested_package_version = new_resource.package_version.split('-').first
+        return if chef_version.satisfies?(">= #{requested_package_version}")
 
         notifying_block do
-          # HACK: AIX package provider does not support installing from remote.
           location = remote_file new_resource.fancy_basename do
             path ::File.join(Chef::Config[:file_cache_path], new_resource.fancy_basename)
             source new_resource.remote_source
@@ -69,13 +69,8 @@ module ChefUpdaterCookbook
             source location.path
             version new_resource.package_version
             provider Chef::Provider::Package::Dpkg if platform?('ubuntu')
-            if platform?('solaris2')
-              provider Chef::Provider::Package::Solaris
-              # TODO: https://github.com/chef/chef/pull/4101
-              action :install
-            else
-              action :upgrade
-            end
+            provider Chef::Provider::Package::Solaris if platform?('solaris2')
+            action :upgrade
             timeout new_resource.timeout
             options new_resource.package_options if new_resource.package_options
             notifies :run, 'ruby_block[Abort Chef Convergence]', :immediately

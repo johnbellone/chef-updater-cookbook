@@ -4,7 +4,7 @@ maintainer_email 'jbellone@bloomberg.net'
 license 'Apache 2.0'
 description 'Application cookbook which provides a custom resource for updating Chef Client.'
 long_description 'Application cookbook which provides a custom resource for updating Chef Client.'
-version '1.1.1'
+version '1.1.2'
 issues_url 'https://github.com/johnbellone/chef-updater-cookbook/issues'
 source_url 'https://github.com/johnbellone/chef-updater-cookbook'
 
@@ -16,3 +16,4 @@ supports 'ubuntu', '>= 12.04'
 supports 'fedora'
 
 depends 'poise', '~> 2.0'
+depends 'chef-sugar', '~> 3.3'
