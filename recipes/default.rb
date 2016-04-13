@@ -12,5 +12,4 @@ chef_updater node['chef-updater']['package_name'] do
   package_checksum node['chef-updater']['package_checksum']
   package_source node['chef-updater']['package_source']
   timeout node['chef-updater']['timeout'] if node['chef-updater']['timeout']
-  package_options '-G' if platform?('solaris2')
 end.run_action(:run)
