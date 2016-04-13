@@ -76,50 +76,35 @@ module ChefUpdaterCookbook
           "#{arch}.msi"
         end
       end
+    end
+  end
 
-      action(:run) do
+  module Provider
+    # @provides chef_updater
+    # @action run
+    # @since 1.2
+    class ChefUpdater < Chef::Provider
+      include Poise
+      provides(:chef_updater)
+
+      def action_run
         requested_package_version = new_resource.package_version.split('-').first
         return if chef_version.satisfies?(">= #{requested_package_version}")
-
         notifying_block do
           location = remote_file new_resource.fancy_basename do
             path ::File.join(Chef::Config[:file_cache_path], new_resource.fancy_basename)
             source new_resource.remote_source
-            checksum new_resource.package_checksum if new_resource.package_checksum
+            checksum new_resource.package_checksum
           end
 
-          if (node['platform_family'] == 'windows')
-            if node['chef_packages']['chef']['version'] != new_resource.package_version
-              execute 'chef-uninstall' do
-                command 'wmic product where "name like \'Chef Client%% %%\'" call uninstall /nointeractive'
-              end
-            end
-            package new_resource.package_name do
-              source location.path
-              installer_type :msi
-              provider Chef::Provider::Package::Windows
-              version new_resource.package_version
-              action :install
-              timeout new_resource.timeout
-              options new_resource.package_options if new_resource.package_options
-              notifies :run, 'ruby_block[Abort Chef Convergence]', :immediately
-            end
-          else
-            package new_resource.package_name do
-              source location.path
-              version new_resource.package_version
-              provider Chef::Provider::Package::Dpkg if platform?('ubuntu')
-              provider Chef::Provider::Package::Solaris if platform?('solaris2')
-              action :upgrade
-              timeout new_resource.timeout
-              options new_resource.package_options if new_resource.package_options
-              notifies :run, 'ruby_block[Abort Chef Convergence]', :immediately
-            end
-          end
-
-          ruby_block 'Abort Chef Convergence' do
-            block { throw :end_client_run_early }
-            action :nothing
+          package new_resource.package_name do
+            action :upgrade
+            provider Chef::Provider::Package::Dpkg if platform?('ubuntu')
+            provider Chef::Provider::Package::Solaris if platform?('solaris2')
+            source location.path
+            version new_resource.package_version
+            timeout new_resource.timeout
+            notifies :run, 'ruby_block[Abort Chef Convergence]', :immediately
           end
         end
       end
