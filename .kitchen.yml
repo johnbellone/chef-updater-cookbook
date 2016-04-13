@@ -10,8 +10,7 @@ platforms:
   - name: ubuntu-14.04
   - name: ubuntu-12.04
   - name: centos-7.1
-  - name: centos-6.6
-  - name: centos-6.4
+  - name: centos-6.7
   - name: centos-5.11
 
 suites:
@@ -32,8 +31,7 @@ suites:
         package_source: "https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-12.5.1-1.el6.x86_64.rpm"
         package_version: "12.5.1-1"
     includes:
-      - centos-6.6
-      - centos-6.4
+      - centos-6.7
   - name: el7
     run_list:
       - recipe[chef-updater::default]

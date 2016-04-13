@@ -2,7 +2,7 @@
 # Cookbook: chef-updater
 # License: Apache 2.0
 #
-# Copyright 2015, Bloomberg Finance L.P.
+# Copyright 2015-2016, Bloomberg Finance L.P.
 #
 require 'poise'
 require 'uri'
@@ -11,18 +11,34 @@ module ChefUpdaterCookbook
   module Resource
     # A custom resource for upgrading the Chef Client.
     # @todo Build a custom resource for managing Omnibus packages.
-    # @since 1.0.0
+    # @provides chef_updater
+    # @action run
+    # @since 1.0
     class ChefUpdater < Chef::Resource
       include Poise(fused: true)
       provides(:chef_updater)
 
+      # @!attribute package_name
+      # @return [String]
       attribute(:package_name, kind_of: String, name_attribute: true)
+      # @!attribute package_checksum
+      # @return [String]
       attribute(:package_checksum, kind_of: String)
+      # @!attribute package_source
+      # @return [String]
       attribute(:package_source, kind_of: String)
-      attribute(:package_version, kind_of: String)
-      attribute(:base_url, kind_of: String)
-      attribute(:timeout, kind_of: [String, Integer], default: 900)
+      # @!attribute package_options
+      # @return [String]
       attribute(:package_options, kind_of: String)
+      # @!attribute package_version
+      # @return [String]
+      attribute(:package_version, kind_of: String)
+      # @!attribute base_url
+      # @return [String]
+      attribute(:base_url, kind_of: String)
+      # @!attribute timeout
+      # @return [Integer]
+      attribute(:timeout, kind_of: [String, Integer], default: 900)
 
       def remote_source
         return package_source if package_source
@@ -51,6 +67,9 @@ module ChefUpdaterCookbook
           "sparc#{node['platform_version']}.solaris"
         elsif platform_family?('aix')
           "#{arch}.bff"
+        elsif platform_family?('windows')
+          arch = 'x64' if arch == 'x86_64'
+          "#{arch}.msi"
         end
       end
 
