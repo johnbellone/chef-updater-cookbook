@@ -88,15 +88,33 @@ module ChefUpdaterCookbook
             checksum new_resource.package_checksum if new_resource.package_checksum
           end
 
-          package new_resource.package_name do
-            source location.path
-            version new_resource.package_version
-            provider Chef::Provider::Package::Dpkg if platform?('ubuntu')
-            provider Chef::Provider::Package::Solaris if platform?('solaris2')
-            action :upgrade
-            timeout new_resource.timeout
-            options new_resource.package_options if new_resource.package_options
-            notifies :run, 'ruby_block[Abort Chef Convergence]', :immediately
+          if (node['platform_family'] == 'windows')
+            if node['chef_packages']['chef']['version'] != new_resource.package_version
+              execute 'chef-uninstall' do
+                command 'wmic product where "name like \'Chef Client%% %%\'" call uninstall /nointeractive'
+              end
+            end
+            package new_resource.package_name do
+              source location.path
+              installer_type :msi
+              provider Chef::Provider::Package::Windows
+              version new_resource.package_version
+              action :install
+              timeout new_resource.timeout
+              options new_resource.package_options if new_resource.package_options
+              notifies :run, 'ruby_block[Abort Chef Convergence]', :immediately
+            end
+          else
+            package new_resource.package_name do
+              source location.path
+              version new_resource.package_version
+              provider Chef::Provider::Package::Dpkg if platform?('ubuntu')
+              provider Chef::Provider::Package::Solaris if platform?('solaris2')
+              action :upgrade
+              timeout new_resource.timeout
+              options new_resource.package_options if new_resource.package_options
+              notifies :run, 'ruby_block[Abort Chef Convergence]', :immediately
+            end
           end
 
           ruby_block 'Abort Chef Convergence' do
