@@ -10,5 +10,5 @@ else
   default['chef-updater']['package_name'] = 'chef'
 end
 
-default['chef-updater']['package_version'] = '12.8.1-1'
+default['chef-updater']['package_version'] = '12.9.38-1'
 default['chef-updater']['package_source'] = nil
