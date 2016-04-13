@@ -46,7 +46,11 @@ module ChefUpdaterCookbook
       end
 
       def fancy_basename
-        delimiter = platform_family?('debian') ? '_' : '.'
+        delimiter = case node['platform_family']
+                    when 'windows' then '-'
+                    when 'debian' then '_'
+                    else '.'
+                    end
         [fancy_package_name, fancy_extension].join(delimiter)
       end
 
