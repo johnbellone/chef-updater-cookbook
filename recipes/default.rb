@@ -7,11 +7,6 @@
 include_recipe 'chef-sugar::default'
 
 at_compile_time do
-  ruby_block 'Abort Chef Convergence' do
-    block { throw :end_client_run_early }
-    action :nothing
-  end
-
   chef_updater node['chef-updater']['package_name'] do
     base_url node['chef-updater']['base_url']
     package_version node['chef-updater']['package_version']

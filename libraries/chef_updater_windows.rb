@@ -24,10 +24,13 @@ module ChefUpdaterCookbook
         notifying_block do
           execute 'chef-uninstall' do
             command 'wmic product where "name like \'Chef Client%% %%\'" call uninstall /nointeractive'
-            not_if { chef_version.satisfies("= #{requested_package_version}") }
             notifies :install, "windows_package[#{new_resource.package_name}]", :immediately
           end
 
+          ruby_block 'Abort Chef Convergence' do
+            block { throw :end_client_run_early }
+            action :nothing
+          end
           windows_package new_resource.package_name do
             action :nothing
             installer_type :msi
