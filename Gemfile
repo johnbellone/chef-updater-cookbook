@@ -1,36 +1,24 @@
 source 'https://rubygems.org'
-gem 'poise'
+gem 'poise', '~> 2.6'
 gem 'poise-boiler'
+gem 'codeclimate-test-reporter', group: :test
 
 group :lint do
-  gem 'foodcritic'
   gem 'rubocop'
+  gem 'foodcritic'
 end
 
-group :kitchen_common do
-  gem 'test-kitchen', '~> 1.4'
-end
-
-group :kitchen_vagrant do
-  gem 'kitchen-vagrant', '~> 0.17'
-end
-
-group :kitchen_cloud do
-  gem 'kitchen-openstack', '~> 1.8'
-end
-
-group :unit do
-  gem 'berkshelf'
+group :unit, :integration do
   gem 'chefspec'
-  gem 'chef-sugar'
-end
-
-group :integration do
+  gem 'berkshelf'
   gem 'serverspec'
 end
 
 group :development do
+  gem 'awesome_print'
+  gem 'github_changelog_generator'
   gem 'rake'
+  gem 'stove'
 end
 
 group :doc do
