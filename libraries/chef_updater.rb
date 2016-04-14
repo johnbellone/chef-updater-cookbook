@@ -9,8 +9,8 @@ require 'uri'
 
 module ChefUpdaterCookbook
   module Resource
-    # A custom resource for upgrading the Chef Client.
-    # @todo Build a custom resource for managing Omnibus packages.
+    # A `chef_updater` resource which manages the update of the node's
+    # Chef Client.
     # @provides chef_updater
     # @action run
     # @since 1.0
@@ -29,9 +29,6 @@ module ChefUpdaterCookbook
       # @!attribute package_source
       # @return [String]
       attribute(:package_source, kind_of: String)
-      # @!attribute package_options
-      # @return [String]
-      attribute(:package_options, kind_of: String)
       # @!attribute package_version
       # @return [String]
       attribute(:package_version, kind_of: String)
@@ -42,11 +39,13 @@ module ChefUpdaterCookbook
       # @return [Integer]
       attribute(:timeout, kind_of: [String, Integer], default: 900)
 
+      # @return [String]
       def remote_source
         return package_source if package_source
         ::URI.join(base_url, fancy_basename).to_s
       end
 
+      # @api private
       def fancy_basename
         delimiter = case node['platform_family']
                     when 'windows' then '-'
@@ -56,11 +55,13 @@ module ChefUpdaterCookbook
         [fancy_package_name, fancy_extension].join(delimiter)
       end
 
+      # @api private
       def fancy_package_name
         delimiter = platform_family?('debian') ? '_' : '-'
         [package_name, package_version].join(delimiter)
       end
 
+      # @api private
       def fancy_extension
         arch = node['kernel']['machine']
         if platform_family?('rhel')

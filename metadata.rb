@@ -17,4 +17,4 @@ supports 'fedora'
 supports 'windows'
 
 depends 'poise', '~> 2.6'
-depends 'chef-sugar', '~> 3.3'
+depends 'chef-sugar'
