@@ -4,11 +4,11 @@
 #
 # Copyright 2015-2016, Bloomberg Finance L.P.
 #
-if platform?('windows')
-  default['chef-updater']['package_name'] = 'chef-client'
-else
-  default['chef-updater']['package_name'] = 'chef'
-end
+default['chef-updater']['package_name'] = if platform?('windows')
+                                            'chef-client'
+                                          else
+                                            'chef'
+                                          end
 
 default['chef-updater']['package_version'] = '12.9.38-1'
 default['chef-updater']['package_source'] = nil
