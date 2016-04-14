@@ -9,6 +9,8 @@ require 'uri'
 
 module ChefUpdaterCookbook
   module Provider
+    # A `chef_updater` provider which updates the Chef Client on the
+    # Windows platform.
     # @provides chef_updater
     # @action run
     # @since 1.2
@@ -31,6 +33,8 @@ module ChefUpdaterCookbook
             installer_type :msi
             version new_resource.package_version
             source new_resource.remote_source
+            checksum new_resource.package_checksum
+            timeout new_resource.timeout
             notifies :run, 'ruby_block[Abort Chef Convergence]', :immediately
           end
         end
