@@ -83,6 +83,8 @@ module ChefUpdaterCookbook
   end
 
   module Provider
+    # A `chef_updater` custom provider for managing a node's Chef
+    # Client installation using the package provider.
     # @provides chef_updater
     # @action run
     # @since 1.2
