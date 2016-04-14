@@ -1,4 +1,10 @@
-# chef-updater-cookbook
+# chef-updater cookbook
+[![Build Status](https://img.shields.io/travis/johnbellone/chef-updater-cookbook.svg)](https://travis-ci.org/johnbellone/chef-updater-cookbook)
+[![Code Quality](https://img.shields.io/codeclimate/github/johnbellone/chef-updater-cookbook.svg)](https://codeclimate.com/github/johnbellone/chef-updater-cookbook)
+[![Test Coverage](https://codeclimate.com/github/johnbellone/chef-updater-cookbook/badges/coverage.svg)](https://codeclimate.com/github/johnbellone/chef-updater-cookbook/coverage)
+[![Cookbook Version](https://img.shields.io/cookbook/v/chef-updater.svg)](https://supermarket.chef.io/cookbooks/chef-updater)
+[![License](https://img.shields.io/badge/license-Apache_2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+
 [Application cookbook][0] which provides a simple recipe for updating
 the Chef Client package on an instance.
 
@@ -32,7 +38,7 @@ the provider is operating on (e.g. 12.4.0-1.el5).
 | Property | Type | Description | Default |
 | -------- | ---- | ----------- | ------- |
 | package_name | String | Name of package to be upgraded. | 'chef' |
-| package_version | String | Version of the package to be upgraded. | '12.4.0' |
+| package_version | String | Version of the package to be upgraded. | '12.9.38' |
 | package_source | [String, NilClass] | Remote URL of where package resides. | nil |
 
 [0]: http://blog.vialstudios.com/the-environment-cookbook-pattern/#theapplicationcookbook
