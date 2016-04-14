@@ -102,6 +102,10 @@ module ChefUpdaterCookbook
             checksum new_resource.package_checksum
           end
 
+          ruby_block 'Abort Chef Convergence' do
+            block { throw :end_client_run_early }
+            action :nothing
+          end
           package new_resource.package_name do
             action :upgrade
             provider Chef::Provider::Package::Dpkg if platform?('ubuntu')
