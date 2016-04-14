@@ -16,6 +16,17 @@ the enterprise likely already have our own mechanisms for distributing
 packages, and most of the time they integrate very well with the
 operating system's package manager.
 
+## Platforms
+This cookbook is tested and used **in production** on the following
+platforms:
+
+- RHEL 5/6/7
+- CentOS 5/6/7
+- Ubuntu 12.04/14.04
+- Windows 2008r2/2012r2
+- AIX 7.1
+- Solaris 11.2
+
 ## Basic Usage
 Because of how this cookbook short-circuits the Chef convergence it
 cannot be run at the compile phase of the run. It should be included
