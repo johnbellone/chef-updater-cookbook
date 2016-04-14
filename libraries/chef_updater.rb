@@ -15,8 +15,10 @@ module ChefUpdaterCookbook
     # @action run
     # @since 1.0
     class ChefUpdater < Chef::Resource
-      include Poise(fused: true)
+      include Poise
       provides(:chef_updater)
+      actions(:run)
+      default_action(:run)
 
       # @!attribute package_name
       # @return [String]
