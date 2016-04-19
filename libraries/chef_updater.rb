@@ -71,6 +71,7 @@ module ChefUpdaterCookbook
           arch = 'amd64' if arch == 'x86_64'
           "#{arch}.deb"
         elsif platform_family?('solaris2')
+          arch = 'sparc' unless arch == 'i386'
           "#{arch}.solaris"
         elsif platform_family?('aix')
           "#{arch}.bff"
