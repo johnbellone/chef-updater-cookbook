@@ -27,8 +27,8 @@ module ChefUpdaterCookbook
             notifies :install, "windows_package[#{new_resource.package_name}]", :immediately
           end
 
-          ruby_block 'Abort Chef Convergence' do
-            block { throw :end_client_run_early }
+          ruby_block 'Abort Due To Chef Upgrade' do
+            block { throw :end_client_run_early_due_to_chef_upgrade }
             action :nothing
           end
           windows_package new_resource.package_name do
@@ -38,7 +38,7 @@ module ChefUpdaterCookbook
             source new_resource.remote_source
             checksum new_resource.package_checksum
             timeout new_resource.timeout
-            notifies :run, 'ruby_block[Abort Chef Convergence]', :immediately
+            notifies :run, 'ruby_block[Abort Due To Chef Upgrade]', :immediately
           end
         end
       end
