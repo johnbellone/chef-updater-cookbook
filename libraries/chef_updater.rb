@@ -103,8 +103,8 @@ module ChefUpdaterCookbook
             checksum new_resource.package_checksum
           end
 
-          ruby_block 'Abort Chef Convergence' do
-            block { throw :end_client_run_early }
+          ruby_block 'Abort Due To Chef Upgrade' do
+            block { throw :end_client_run_early_due_to_chef_upgrade }
             action :nothing
           end
           package new_resource.package_name do
@@ -114,7 +114,7 @@ module ChefUpdaterCookbook
             source location.path
             version new_resource.package_version
             timeout new_resource.timeout
-            notifies :run, 'ruby_block[Abort Chef Convergence]', :immediately
+            notifies :run, 'ruby_block[Abort Due To Chef Upgrade]', :immediately
           end
         end
       end
