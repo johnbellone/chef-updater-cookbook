@@ -12,6 +12,7 @@ at_compile_time do
     package_version node['chef-updater']['package_version']
     package_checksum node['chef-updater']['package_checksum']
     package_source node['chef-updater']['package_source']
+    use_ips_package node['chef-updater']['use_ips_package']
     timeout node['chef-updater']['timeout'] if node['chef-updater']['timeout']
   end
 end
