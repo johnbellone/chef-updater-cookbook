@@ -38,9 +38,6 @@ module ChefUpdaterCookbook
       # @!attribute timeout
       # @return [Integer]
       attribute(:timeout, kind_of: [String, Integer], default: 900)
-      # @!attribute use_ips_package
-      # @return [Boolean]
-      attribute(:use_ips_package, kind_of: [TrueClass, FalseClass], default: false)
 
       # @return [String]
       def remote_source
@@ -75,11 +72,7 @@ module ChefUpdaterCookbook
           "#{arch}.deb"
         elsif platform_family?('solaris2')
           arch = 'sparc' unless arch == 'i386'
-          if use_ips_package
-            "#{arch}.solaris.p5p"
-          else
-            "#{arch}.solaris"
-          end
+          "#{arch}.solaris"
         elsif platform_family?('aix')
           "#{arch}.bff"
         elsif platform_family?('windows')
@@ -114,29 +107,10 @@ module ChefUpdaterCookbook
             block { throw :end_client_run_early_due_to_chef_upgrade }
             action :nothing
           end
-
-          if platform?('solaris2') && new_resource.use_ips_package
-            # Remove it from the old packaging system if it's there
-            # Otherwise, you end up with both
-            # The solaris_package resource does not remove packages properly.
-            # https://github.com/chef/chef/blob/master/lib/chef/provider/package/solaris.rb#L59
-            # it uses pkginfo -d which tells you about the package *in a source*
-            # which is not the package *installed on the system*
-            # load_current_resource is called when you attempt to use action :remove
-            # Ergo, we do it the evil way
-            # The "yes" is necessary because pkgrm wants to be interactive
-            # and we haven't set up the "admin file" to make it accept -n for chef.
-            bash 'uninstall old chef' do
-              code 'yes | pkgrm chef'
-              only_if 'pkginfo -l chef'
-            end
-          end
-
           package new_resource.package_name do
             action :upgrade
             provider Chef::Provider::Package::Dpkg if platform?('ubuntu')
-            provider Chef::Provider::Package::Ips if platform?('solaris2') && new_resource.use_ips_package
-            provider Chef::Provider::Package::Solaris if platform?('solaris2') && !new_resource.use_ips_package
+            provider Chef::Provider::Package::Solaris if platform?('solaris2')
             source location.path
             version new_resource.package_version
             timeout new_resource.timeout
