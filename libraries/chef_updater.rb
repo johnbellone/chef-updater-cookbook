@@ -45,7 +45,7 @@ module ChefUpdaterCookbook
       # @return [String]
       def remote_source
         return package_source if package_source
-        ::URI.join(base_url, fancy_basename).to_s
+        ::URI.join(base_url, fancy_path, fancy_basename).to_s
       end
 
       # @api private
@@ -56,6 +56,18 @@ module ChefUpdaterCookbook
                     else '.'
                     end
         [fancy_package_name, fancy_extension].join(delimiter)
+      end
+
+      def fancy_path
+        major   = package_version.split('.')[0].to_i
+        minor   = package_version.split('.')[1].to_i
+        version = package_version.split('-')[0]
+        path    = if major >= 12 && minor >= 14 || major >= 13
+                    %W[ files stable chef #{version} #{node['platform']} #{node['platform_version']} ]
+                  else
+                    %W[ stable #{node['platform']} #{node['platform_version']} ]
+                  end
+        path.join('/') << '/'
       end
 
       # @api private
