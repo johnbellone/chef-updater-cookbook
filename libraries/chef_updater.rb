@@ -59,13 +59,14 @@ module ChefUpdaterCookbook
       end
 
       def fancy_path
+        platform = platform_family?('rhel') ? 'el' : node['platform']
         major   = package_version.split('.')[0].to_i
         minor   = package_version.split('.')[1].to_i
         version = package_version.split('-')[0]
         path    = if major >= 12 && minor >= 14 || major >= 13
-                    %W[ files stable chef #{version} #{node['platform']} #{node['platform_version']} ]
+                    %W[ files stable chef #{version} #{platform} #{node['platform_version']} ]
                   else
-                    %W[ stable #{node['platform']} #{node['platform_version']} ]
+                    %W[ stable #{platform} #{node['platform_version']} ]
                   end
         path.join('/') << '/'
       end
