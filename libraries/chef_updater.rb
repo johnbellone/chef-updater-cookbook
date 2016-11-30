@@ -60,15 +60,43 @@ module ChefUpdaterCookbook
 
       def fancy_path
         platform = platform_family?('rhel') ? 'el' : node['platform']
+        url_version = get_url_version(platform, node['platform_version'])
         major   = package_version.split('.')[0].to_i
         minor   = package_version.split('.')[1].to_i
         version = package_version.split('-')[0]
         path    = if major >= 12 && minor >= 14 || major >= 13
-                    %W[ files stable chef #{version} #{platform} #{node['platform_version']} ]
+                    %W[ #{version} #{platform} #{url_version} ]
                   else
-                    %W[ stable #{platform} #{node['platform_version']} ]
+                    %W[ #{platform} #{url_version} ]
                   end
         path.join('/') << '/'
+      end
+
+      def get_url_version(platform, platform_version)
+        # This is incredibly ugly because the URL path isn't precise.
+        # For some OSes, it uses the full version number, for others only part.
+        # For Windows it's always 2012r2 because it's the same package for all.
+        case platform
+        when 'aix'
+          if platform_version[0] == '7'
+            return '7.1'
+          else
+            return '6.1'
+          end
+        when 'el'
+          # it's just '5', '6', or '7'
+          return platform_version[0]
+        when 'mac_os_x'
+          # we only support 10.11
+          return '10.11'
+        when 'solaris2'
+          return platform_version
+        when 'ubuntu'
+          return platform_version
+        when 'windows'
+          return '2012r2'
+        end
+        raise "Unsupported Platform & Version: #{platform} #{platform_version}"
       end
 
       # @api private
